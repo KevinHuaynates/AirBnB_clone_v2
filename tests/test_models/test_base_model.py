@@ -82,18 +82,28 @@ class TestBaseModel(unittest.TestCase):
         """Test that two BaseModel instances have different datetime objects
         and that upon creation have identical updated_at and created_at
         value."""
+        # Check if created_at falls within the expected range for inst1
+        tic = datetime.utcnow()
         inst1 = BaseModel()
-        time.sleep(0.1)  # Aumenta el tiempo de espera
+        toc = datetime.utcnow()
+
+        self.assertIsInstance(inst1.created_at, datetime)
+        self.assertLessEqual(tic, inst1.created_at)
+        self.assertLessEqual(inst1.created_at, toc)
+
+        # Check if created_at falls within the expected range for inst2
+        tic = datetime.utcnow()
         inst2 = BaseModel()
+        toc = datetime.utcnow()
 
-        # Asegura que las fechas de creación sean diferentes
-        self.assertNotEqual(inst1.created_at, inst2.created_at)
+        self.assertIsInstance(inst2.created_at, datetime)
+        self.assertLessEqual(tic, inst2.created_at)
+        self.assertLessEqual(inst2.created_at, toc)
 
-        # Asegura que las fechas de actualización sean iguales
+        # Check if created_at and updated_at attributes
+        # are the same when create a new instance for each instance
         self.assertEqual(inst1.created_at, inst1.updated_at)
         self.assertEqual(inst2.created_at, inst2.updated_at)
-
-        # Asegura que las fechas de creación y actualización sean distintas
         self.assertNotEqual(inst1.created_at, inst2.created_at)
         self.assertNotEqual(inst1.updated_at, inst2.updated_at)
 
